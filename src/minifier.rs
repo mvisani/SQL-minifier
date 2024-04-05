@@ -101,19 +101,19 @@ pub fn minifiy_sql_to_file(input_file: &str, output_file: &str) -> Result<(), st
 
 /// This macro will minify all the SQL files passed as arguments and save them
 /// with the same name but with '_minified.sql' appended to the original filename
+/// So if the file name is 'file.sql', the minified file will be 'file_minified.sql'
 #[macro_export]
 macro_rules! minify_sql_files {
     ($($file:expr),*) => {
         $(
-            {
-                let input_file = $file;
-                let output_file = format!("{}_minified.sql", input_file); // Appending '_minified.sql' to the original filename
-                if let Err(e) = minifiy_sql_to_file(input_file, &output_file) {
-                    eprintln!("Error minifying SQL file {}: {}", input_file, e);
-                } else {
-                    println!("SQL file {} has been minified and saved as {}", input_file, output_file);
-                }
-            }
+            // output_file should find the last '.sql' and append '_minified.sql' to the filename
+            let output_file = {
+                let mut output_file = $file.to_string();
+                let last_dot = output_file.rfind('.').unwrap();
+                output_file.insert_str(last_dot, "_minified");
+                output_file
+            };
+            minifiy_sql_to_file($file, &output_file).unwrap();
         )*
     };
 }
