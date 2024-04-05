@@ -8,6 +8,6 @@ mod types;
 
 /// Prelude module
 pub mod prelude {
-    pub use crate::minifier::{minifiy_sql_to_file, minifiy_sql_to_string};
+    pub use crate::minifier::*;
     pub use crate::minify_sql_files;
 }
