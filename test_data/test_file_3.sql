@@ -26,6 +26,8 @@ CREATE TABLE container_horizontal_rules (
             OR maximum_temperature IS NULL
             OR minimum_temperature <= maximum_temperature
         ),
+        /* The minimum humidity must be less than or
+        equal to the maximum humidity. */
         CHECK (
             minimum_humidity IS NULL
             OR maximum_humidity IS NULL
@@ -37,3 +39,4 @@ CREATE TABLE container_horizontal_rules (
             OR minimum_pressure <= maximum_pressure
         )
 );
+/* and other multiline comment */

@@ -1,4 +1,5 @@
 use crate::types::Sqltypes;
+use regex::Regex;
 /// Implementation of a file parser
 /// Each line of the file should be parsed and if the line contains one of the
 /// data types that is in a long format, it should replace it by a short format.
@@ -78,8 +79,17 @@ pub fn minifiy_sql_to_string(file_path: &str) -> Result<String, std::io::Error> 
     }
     // remove all excess whitespaces meaning that if the string has more that
     // one whitespace, it will be replaced by a single whitespace
+    let output = remove_multiline_comments(&output);
     let output = output.split_whitespace().collect::<Vec<&str>>().join(" ");
     Ok(output)
+}
+
+fn remove_multiline_comments(sql_content: &str) -> String {
+    // Regular expression to match multiline comments
+    let re = Regex::new(r"/\*.*?\*/").unwrap();
+
+    // Replace all occurrences of multiline comments with an empty string
+    re.replace_all(sql_content, "").to_string()
 }
 
 /// This function will minify SQL file and write the output to a new file
