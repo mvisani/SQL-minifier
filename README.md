@@ -2,6 +2,7 @@
 [![Build status](https://github.com/mvisani/SQL-minifier/actions/workflows/build.yml/badge.svg)](https://github.com/mvisani/SQL-minifier/actions)
 [![Crates.io](https://img.shields.io/crates/v/SQL-minifier.svg)](https://crates.io/crates/SQL-minifier)
 [![Documentation](https://docs.rs/sql_minifier/badge.svg)](https://docs.rs/sql_minifier)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 This crate provides a simple SQL minifier. It removes comments and unnecessary whitespaces from SQL files.
 
