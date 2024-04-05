@@ -2,6 +2,13 @@
 name = "sql_minifier"
 version = "0.1.0"
 edition = "2021"
+license = "GPL-3.0"
+description = "A simple SQL file minimizer"
+readme = "README.md"
+repository = "https://github.com/mvisani/SQL-minifier"
+keywords = ["sql", "minifier"]
+categories = ["filesystem", "database"]
+authors = ["Marco Visani"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
