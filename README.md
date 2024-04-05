@@ -1,6 +1,18 @@
 # SQL minifier
 This crate provides a simple SQL minifier. It removes comments and unnecessary whitespaces from SQL files.
 
+## Installation
+Add the following to your `Cargo.toml` file:
+```toml
+[dependencies]
+sql_minifier = "0.1.0"
+```
+
+or use the following command:
+```bash
+cargo add sql_minifier
+```
+
 ## Usage
 ```rust
 use sql_minifier::prelude::*;
