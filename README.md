@@ -1,5 +1,5 @@
 # SQL minifier
-[![Build status](https://github.com/mvisani/SQL-minifier/actions/workflows/rust.yml/badge.svg)](https://github.com/earth-metabolome-initiative/emi-monorepo/actions)
+[![Build status](https://github.com/mvisani/SQL-minifier/actions/workflows/build.yml/badge.svg)](https://github.com/mvisani/SQL-minifier/actions)
 [![Crates.io](https://img.shields.io/crates/v/SQL-minifier.svg)](https://crates.io/crates/SQL-minifier)
 [![Documentation](https://docs.rs/sql_minifier/badge.svg)](https://docs.rs/sql_minifier)
 
