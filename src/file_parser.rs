@@ -1,3 +1,4 @@
+use crate::types::Sqltypes;
 /// Implementation of a file parser
 /// Each line of the file should be parsed and if the line contains one of the
 /// data types that is in a long format, it should replace it by a short format.
@@ -5,10 +6,11 @@ use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::Path;
 
-use crate::types::Sqltypes;
-
-/// Parse the file and replace the long format data types by the short format.
-pub fn parse_file(file_path: &str) -> Result<String, std::io::Error> {
+/// Parse the file and replace the long format data types by the short format,
+///  while ignoring SQL comments.
+/// The function should read line by line the file, split at whitespaces and
+/// convert long format data types to short format.
+pub fn minifiy_sql_file(file_path: &str) -> Result<String, std::io::Error> {
     let path = Path::new(file_path);
     let file = File::open(&path)?;
     let reader = BufReader::new(file);
@@ -52,15 +54,16 @@ pub fn parse_file(file_path: &str) -> Result<String, std::io::Error> {
                         // End of line
                         match Sqltypes::try_from(word.clone()) {
                             Ok(short) => output.push_str(&format!("{}", short)),
-                            Err(_) => output.push_str(&word),
+                            Err(_) => output.push_str(&format!("{}", word)),
                         }
                     }
                 }
             }
         }
-        output.push('\n');
     }
-
+    // remove all excess whitespaces meaning that if the string has more that
+    // one whitespace, it will be replaced by a single whitespace
+    let output = output.split_whitespace().collect::<Vec<&str>>().join(" ");
     Ok(output)
 }
 
@@ -70,9 +73,9 @@ mod tests {
     use super::*;
     #[test]
     fn test_parse_file() {
-        let file_path = "test_data/test_file_1.txt";
-        let expected = "-- Your SQL goes here\nCREATE TABLE IF NOT EXISTS taxa (\n    -- The unique identifier for the taxon\n    id UUID PRIMARY KEY,\n    -- The scientific name of the taxon\n    name TEXT NOT NULL,\n    -- The NCBI Taxon ID is a unique identifier for a taxon in the NCBI Taxonomy database\n    -- which may be NULL when this taxon is not present in the NCBI Taxonomy database.\n    ncbi_taxon_id INT\n);\n";
-        let content = parse_file(file_path).unwrap();
+        let file_path = "test_data/test_file_1.sql";
+        let expected = "CREATE TABLE IF NOT EXISTS taxa ( id UUID PRIMARY KEY, name TEXT NOT NULL, ncbi_taxon_id INT);";
+        let content = minifiy_sql_file(file_path).unwrap();
         let not_expected = "hello";
         assert_eq!(content, expected);
         assert_ne!(content, not_expected);
@@ -80,9 +83,9 @@ mod tests {
 
     #[test]
     fn test_bigger_file() {
-        let file_path = "test_data/test_file_2.txt";
-        let expected = "-- SQL to create the projects table.\nCREATE TABLE projects (\n    id UUID PRIMARY KEY,\n    name TEXT NOT NULL UNIQUE,\n    description TEXT NOT NULL,\n    public BOOL NOT NULL DEFAULT TRUE,\n    state_id UUID NOT NULL REFERENCES project_states(id),\n    parent_project_id UUID REFERENCES projects(id) ON\n    DELETE\n        CASCADE,\n        budget FLOAT DEFAULT NULL,\n        expenses FLOAT DEFAULT NULL,\n        created_by UUID NOT NULL REFERENCES users(id),\n        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n        expected_end_date TIMESTAMP DEFAULT NULL,\n        end_date TIMESTAMP DEFAULT NULL\n);\n";
-        let content = parse_file(file_path).unwrap();
+        let file_path = "test_data/test_file_2.sql";
+        let expected = "CREATE TABLE projects ( id UUID PRIMARY KEY, name TEXT NOT NULL UNIQUE, description TEXT NOT NULL, public BOOL NOT NULL DEFAULT TRUE, state_id UUID NOT NULL REFERENCES project_states(id), parent_project_id UUID REFERENCES projects(id) ON DELETE CASCADE, budget FLOAT DEFAULT NULL, expenses FLOAT DEFAULT NULL, created_by UUID NOT NULL REFERENCES users(id), created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, expected_end_date TIMESTAMP DEFAULT NULL, end_date TIMESTAMP DEFAULT NULL);";
+        let content = minifiy_sql_file(file_path).unwrap();
 
         assert_eq!(content, expected);
     }
