@@ -5,7 +5,7 @@ This crate provides a simple SQL minifier. It removes comments and unnecessary w
 Add the following to your `Cargo.toml` file:
 ```toml
 [dependencies]
-sql_minifier = "0.1.0"
+sql_minifier = "0.1.1"
 ```
 
 or use the following command:
