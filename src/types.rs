@@ -1,7 +1,7 @@
 use std::fmt::Display;
 
 /// SQL Sqltypes that can be abbreviated.
-pub enum Sqltypes {
+pub(crate) enum Sqltypes {
     /// INTEGER can be abbreviated as INT
     Integer,
     /// INTEGER with comma can be abbreviated as INT,

@@ -3,10 +3,11 @@
 #![doc = include_str!("../README.md")]
 #![deny(missing_docs)]
 
-mod file_parser;
+mod minifier;
 mod types;
 
 /// Prelude module
 pub mod prelude {
-    pub use crate::types::*;
+    pub use crate::minifier::{minifiy_sql_to_file, minifiy_sql_to_string};
+    pub use crate::minify_sql_files;
 }
