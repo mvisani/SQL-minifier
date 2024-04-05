@@ -25,9 +25,14 @@ The create provides two main functions:
 - `minifiy_sql_to_file` which reads an SQL file and writes the minified SQL
   to a new file specified by the user.
 
-Additionally, the crate provides a macro `minify_sql_files!` that can be used to minify SQL files at compile time. The macro accepts file paths as input.
+Additionally, the crate provides a macro `minify_sql_files!` that can be used 
+to minify SQL files at compile time. The macro accepts file paths as input.
 
-It's important to note that the macro will write the minified SQL to a new file with the same name as the input file, but with the suffix `_minified`. Additionally, it will append the `_minified` suffix just before the last `.` in the file name. For instance, if the input file is `test_data/test_file_1.sql`, the minified file will be named `test_data/test_file_1_minified.sql`.
+It's important to note that the macro will write the minified SQL to a new file
+with the same name as the input file, but with the suffix `_minified`.
+Additionally, it will append the `_minified` suffix just before the last `.` in the
+file name. For instance, if the input file is `test_data/test_file_1.sql`, the
+minified file will be named `test_data/test_file_1_minified.sql`.
 
 The macro can be utilized as follows:
 ```rust
