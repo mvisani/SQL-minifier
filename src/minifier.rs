@@ -32,45 +32,32 @@ pub fn minifiy_sql_to_string(file_path: &str) -> Result<String, std::io::Error> 
     for line in reader.lines() {
         let mut word = String::new();
         let line = line?;
+        // Remove single line comments
+        let line = remove_single_line_comments(&line);
+
         let mut chars = line.chars();
-        let mut comment_started = false;
 
         while let Some(c) = chars.next() {
-            if c == '-' && comment_started {
-                // If a comment has started, ignore the rest of the line
-                break;
-            } else if c == '-' {
-                // Check if it's the beginning of a comment
-                if let Some(next) = chars.clone().next() {
-                    if next == '-' {
-                        comment_started = true;
-                        continue;
-                    }
-                }
-            }
-
-            if !comment_started {
-                if c.is_whitespace() {
-                    output.push(c);
-                } else {
-                    word.push(c);
-                    match chars.clone().next() {
-                        Some(next) => {
-                            if next.is_whitespace() {
-                                // If the next character is whitespace, we've collected a word, let's check it
-                                match Sqltypes::try_from(word.clone()) {
-                                    Ok(short) => output.push_str(&short.to_string()),
-                                    Err(_) => output.push_str(&word),
-                                }
-                                word.clear();
-                            }
-                        }
-                        None => {
-                            // End of line
+            if c.is_whitespace() {
+                output.push(c);
+            } else {
+                word.push(c);
+                match chars.clone().next() {
+                    Some(next) => {
+                        if next.is_whitespace() {
+                            // If the next character is whitespace, we've collected a word, let's check it
                             match Sqltypes::try_from(word.clone()) {
                                 Ok(short) => output.push_str(&short.to_string()),
                                 Err(_) => output.push_str(&word),
                             }
+                            word.clear();
+                        }
+                    }
+                    None => {
+                        // End of line
+                        match Sqltypes::try_from(word.clone()) {
+                            Ok(short) => output.push_str(&short.to_string()),
+                            Err(_) => output.push_str(&word),
                         }
                     }
                 }
@@ -89,6 +76,14 @@ fn remove_multiline_comments(sql_content: &str) -> String {
     let re = Regex::new(r"/\*.*?\*/").unwrap();
 
     // Replace all occurrences of multiline comments with an empty string
+    re.replace_all(sql_content, "").to_string()
+}
+
+fn remove_single_line_comments(sql_content: &str) -> String {
+    // Regular expression to match single line comments
+    let re = Regex::new(r"--.*").unwrap();
+
+    // Replace all occurrences of single line comments with an empty string
     re.replace_all(sql_content, "").to_string()
 }
 
