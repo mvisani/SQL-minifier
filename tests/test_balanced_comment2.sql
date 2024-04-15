@@ -1,0 +1,1 @@
+SELECT */* SELECT * FROM /*table4*/ table2; */ FROM table1;

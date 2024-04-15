@@ -1,13 +1,11 @@
-//! This crate provides bindings for the Sirius executable.
-//! All the parameters of sirius should be accessible from this crate.
 #![doc = include_str!("../README.md")]
 #![deny(missing_docs)]
 
-mod minifier;
-mod types;
+pub use minify_sql::minify_sql;
 
-/// Prelude module
-pub mod prelude {
-    pub use crate::minifier::*;
-    pub use crate::minify_sql_files;
+/// This module contains procedural macros
+/// to minify SQL queries at compile time
+pub mod macros {
+    pub use load_sql_proc::load_sql;
+    pub use minify_sql_proc::minify_sql;
 }

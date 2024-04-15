@@ -10,7 +10,7 @@ keywords = ["sql", "minifier"]
 categories = ["filesystem", "database"]
 authors = ["Marco Visani"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
-regex = "1.10.4"
+minify_sql = { path = "minify_sql" }
+load_sql_proc = { path = "load_sql_proc" }
+minify_sql_proc = { path = "minify_sql_proc" }

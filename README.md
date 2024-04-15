@@ -4,8 +4,8 @@
 [![Documentation](https://docs.rs/sql_minifier/badge.svg)](https://docs.rs/sql_minifier)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-This crate provides a simple SQL minifier. It removes comments, unnecessary
-whitespaces, and shortens they keywords that can be shortened from SQL files. 
+This crate provides the methods and procedural macros to minify SQL code, optionally at compile time.
+It removes comments, unnecessary whitespaces, and shortens SQL keywords such as `INTEGER` to `INT`.
 
 ## Installation
 Add the following to your `Cargo.toml` file:
@@ -19,36 +19,14 @@ or use the following command:
 cargo add sql_minifier
 ```
 
-## Usage
-The create provides two main functions:
-- `minifiy_sql_to_string` which reads an SQL file and returns a `String` of the
-  minified SQL.
-- `minifiy_sql_to_file` which reads an SQL file and writes the minified SQL
-  to a new file specified by the user.
+## Examples
+Suppose you have an SQL string and you want to minify it. You can use the `minify_sql` function:
 
-Additionally, the crate provides a macro `minify_sql_files!` that can be used 
-to minify SQL files at compile time. The macro accepts file paths as input.
-
-It's important to note that the macro will write the minified SQL to a new file
-with the same name as the input file, but with the suffix `_minified`.
-Additionally, it will append the `_minified` suffix just before the last `.` in the
-file name. For instance, if the input file is `test_data/test_file_1.sql`, the
-minified file will be named `test_data/test_file_1_minified.sql`.
-
-The macro can be utilized as follows:
 ```rust
-use sql_minifier::prelude::*;
-minify_sql_files!(
-  "test_data/test_file_1.sql",
-  "test_data/test_file_2.sql",
-  "test_data/test_file_3.sql"
-  );
-```
+use sql_minifier::minify_sql;
 
-## Example
-The following SQL file:
-```sql
--- Your SQL goes here
+let minified: String = minify_sql(
+    "-- Your SQL goes here
 CREATE TABLE IF NOT EXISTS taxa (
     -- The unique identifier for the taxon
     id UUID PRIMARY KEY,
@@ -57,15 +35,39 @@ CREATE TABLE IF NOT EXISTS taxa (
     -- The NCBI Taxon ID is a unique identifier for a taxon in the NCBI Taxonomy database
     -- which may be NULL when this taxon is not present in the NCBI Taxonomy database.
     ncbi_taxon_id INTEGER
+);"
+);
+
+assert_eq!(
+    minified,
+    "CREATE TABLE IF NOT EXISTS taxa(id UUID PRIMARY KEY,name TEXT NOT NULL,ncbi_taxon_id INT)"
 );
 ```
 
-will be minified to:
-```sql
-CREATE TABLE IF NOT EXISTS taxa ( id UUID PRIMARY KEY, name TEXT NOT NULL, ncbi_taxon_id INT);
+If you want this to be done at compile time, you can use the `minify_sql` macro:
+```rust
+use sql_minifier::macros::minify_sql;
+
+const SQL_CONTENT: &str = minify_sql!(
+    "-- Your SQL goes here
+CREATE TABLE IF NOT EXISTS taxa (
+    -- The unique identifier for the taxon
+    id UUID PRIMARY KEY,
+    -- The scientific name of the taxon
+    name TEXT NOT NULL,
+    -- The NCBI Taxon ID is a unique identifier for a taxon in the NCBI Taxonomy database
+    -- which may be NULL when this taxon is not present in the NCBI Taxonomy database.
+    ncbi_taxon_id INTEGER
+);"
+);
+
+assert_eq!(
+    SQL_CONTENT,
+    "CREATE TABLE IF NOT EXISTS taxa(id UUID PRIMARY KEY,name TEXT NOT NULL,ncbi_taxon_id INT)"
+);
 ```
 
-A more complex SQL file:
+A more complex [SQL file](tests/test_file_3.sql) such as:
 ```sql
 -- SQL defining the container_horizontal_rules table.
 -- The container horizontal rules define whether an item type can be placed next to another item type.
@@ -111,7 +113,15 @@ CREATE TABLE container_horizontal_rules (
 /* and other multiline comment */
 ```
 
-will be minified to:
-```sql
-CREATE TABLE container_horizontal_rules ( id UUID PRIMARY KEY REFERENCES describables(id) ON DELETE CASCADE, item_type_id UUID REFERENCES item_categories(id) ON DELETE CASCADE, other_item_type_id UUID REFERENCES item_categories(id) ON DELETE CASCADE, minimum_temperature FLOAT DEFAULT NULL, maximum_temperature FLOAT DEFAULT NULL, minimum_humidity FLOAT DEFAULT NULL, maximum_humidity FLOAT DEFAULT NULL, minimum_pressure FLOAT DEFAULT NULL, maximum_pressure FLOAT DEFAULT NULL, CHECK ( minimum_temperature IS NULL OR maximum_temperature IS NULL OR minimum_temperature <= maximum_temperature ), CHECK ( minimum_humidity IS NULL OR maximum_humidity IS NULL OR minimum_humidity <= maximum_humidity ), CHECK ( minimum_pressure IS NULL OR maximum_pressure IS NULL OR minimum_pressure <= maximum_pressure ));
+We can load it and minify it at compile time using the `load_sql` macro:
+```rust
+use sql_minifier::macros::load_sql;
+
+const SQL_CONTENT: &str = load_sql!("tests/test_file_3.sql");
+
+assert_eq!(
+    SQL_CONTENT,
+    "CREATE TABLE container_horizontal_rules(id UUID PRIMARY KEY REFERENCES describables(id)ON DELETE CASCADE,item_type_id UUID REFERENCES item_categories(id)ON DELETE CASCADE,other_item_type_id UUID REFERENCES item_categories(id)ON DELETE CASCADE,minimum_temperature FLOAT DEFAULT NULL,maximum_temperature FLOAT DEFAULT NULL,minimum_humidity FLOAT DEFAULT NULL,maximum_humidity FLOAT DEFAULT NULL,minimum_pressure FLOAT DEFAULT NULL,maximum_pressure FLOAT DEFAULT NULL,CHECK(minimum_temperature IS NULL OR maximum_temperature IS NULL OR minimum_temperature<=maximum_temperature),CHECK(minimum_humidity IS NULL OR maximum_humidity IS NULL OR minimum_humidity<=maximum_humidity),CHECK(minimum_pressure IS NULL OR maximum_pressure IS NULL OR minimum_pressure<=maximum_pressure))"
+);
 ```
+
