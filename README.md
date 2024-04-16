@@ -4,8 +4,8 @@
 [![Documentation](https://docs.rs/sql_minifier/badge.svg)](https://docs.rs/sql_minifier)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-This crate provides the methods and procedural macros to minify SQL code, optionally at compile time.
-It removes comments, unnecessary whitespaces, and shortens SQL keywords such as `INTEGER` to `INT`.
+[SQL minifier](https://github.com/mvisani/SQL-minifier) provides methods and procedural macros to minify SQL code, optionally at compile time.
+It removes both single-line `--` and multi-line `/* ... */` comments, unnecessary whitespaces, and shortens SQL keywords such as `INTEGER` to `INT`.
 
 ## Installation
 Add the following to your `Cargo.toml` file:

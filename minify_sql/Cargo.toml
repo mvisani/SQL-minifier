@@ -1,8 +1,15 @@
 [package]
 name = "minify_sql"
-version = "0.1.0"
-edition = "2021"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+categories.workspace = true
+repository.workspace = true
+authors.workspace = true
+keywords.workspace = true
+readme.workspace = true
+description = "Crate providing a function to minify SQL queries."
 
 [dependencies]
-quote = "1.0.36"
-regex = "1.10.4"
+quote.workspace = true
+regex.workspace = true
