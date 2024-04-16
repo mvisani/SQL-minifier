@@ -20,7 +20,7 @@ cargo add sql_minifier
 ```
 
 ## Examples
-Suppose you have an SQL string and you want to minify it. You can use the `minify_sql` function:
+Suppose you have an SQL string and you want to minify it. You can use the [`minify_sql`](https://github.com/mvisani/SQL-minifier/blob/b22627d27905ea5ce92d3a683ac10d11bccbfae9/minify_sql/src/lib.rs#L35) function:
 
 ```rust
 use sql_minifier::minify_sql;
@@ -44,7 +44,7 @@ assert_eq!(
 );
 ```
 
-If you want this to be done at compile time, you can use the `minify_sql` macro:
+If you want this to be done at compile time, you can use the [`minify_sql`](https://github.com/mvisani/SQL-minifier/blob/b22627d27905ea5ce92d3a683ac10d11bccbfae9/minify_sql_proc/src/lib.rs#L39) macro:
 ```rust
 use sql_minifier::macros::minify_sql;
 
@@ -113,7 +113,7 @@ CREATE TABLE container_horizontal_rules (
 /* and other multiline comment */
 ```
 
-We can load it and minify it at compile time using the `load_sql` macro:
+We can load it and minify it at compile time using the [`load_sql`](https://github.com/mvisani/SQL-minifier/blob/b22627d27905ea5ce92d3a683ac10d11bccbfae9/load_sql_proc/src/lib.rs#L26) macro:
 ```rust
 use sql_minifier::macros::load_sql;
 
