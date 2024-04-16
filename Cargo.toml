@@ -21,9 +21,9 @@ readme = "README.md"
 edition = "2018"
 license = "GPL-3.0"
 repository = "https://github.com/mvisani/SQL-minifier"
-categories = ["filesystem", "database"]
-authors = ["Marco Visani"]
-keywords = ["sql", "minifier"]
+categories = ["database", "compression"]
+authors = ["Marco Visani", "Luca Cappelletti"]
+keywords = ["sql", "minifier", "compression", "database", "macro"]
 
 [workspace.dependencies]
 minify_sql = { path = "minify_sql" }
