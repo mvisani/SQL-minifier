@@ -14,3 +14,10 @@ authors = ["Marco Visani"]
 minify_sql = { path = "minify_sql" }
 load_sql_proc = { path = "load_sql_proc" }
 minify_sql_proc = { path = "minify_sql_proc" }
+
+[workspace]
+members = [
+    "minify_sql",
+    "load_sql_proc",
+    "minify_sql_proc"
+]

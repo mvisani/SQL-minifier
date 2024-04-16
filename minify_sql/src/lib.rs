@@ -37,7 +37,7 @@ pub fn minify_sql(document: &str) -> String {
     // We need to this first, as the multiline comments can span multiple lines
     // and if we remove the line breaks first, we might accidentally add new
     // combinations of characters that seem to be an open or close comment.
-    let document_without_multiline_comments = remove_multiline_comments(&document);
+    let document_without_multiline_comments = remove_multiline_comments(document);
 
     // We remove in all lines of the file the single line comments
     let mut document_without_comments =
