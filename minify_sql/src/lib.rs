@@ -81,11 +81,12 @@ pub fn minify_sql(document: &str) -> String {
 }
 
 /// List of long format data types and their corresponding short format
-const LONG_FORMAT_TYPES: [(&str, &str); 4] = [
+const LONG_FORMAT_TYPES: [(&str, &str); 5] = [
     ("INTEGER", "INT"),
     ("BOOLEAN", "BOOL"),
     ("CHARACTER", "CHAR"),
     ("DECIMAL", "DEC"),
+    ("TEMPORARY", "TEMP")
 ];
 
 /// Remove all multiline comments from the SQL content
