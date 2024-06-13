@@ -13,3 +13,6 @@ description = "Crate providing a function to minify SQL queries."
 [dependencies]
 quote.workspace = true
 regex.workspace = true
+
+[features]
+gluesql = []

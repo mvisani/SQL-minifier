@@ -28,7 +28,7 @@ use regex::Regex;
 /// );
 ///
 /// assert_eq!(
-///     SQL_CONTENT,
+///     minified,
 ///     "CREATE TABLE IF NOT EXISTS taxa(id UUID PRIMARY KEY,name TEXT NOT NULL,ncbi_taxon_id INT)"
 /// );
 /// ```
@@ -80,13 +80,24 @@ pub fn minify_sql(document: &str) -> String {
     output
 }
 
+#[cfg(not(feature = "gluesql"))]
 /// List of long format data types and their corresponding short format
 const LONG_FORMAT_TYPES: [(&str, &str); 5] = [
     ("INTEGER", "INT"),
     ("BOOLEAN", "BOOL"),
     ("CHARACTER", "CHAR"),
     ("DECIMAL", "DEC"),
-    ("TEMPORARY", "TEMP")
+    ("TEMPORARY", "TEMP"),
+];
+
+#[cfg(feature = "gluesql")]
+/// List of long format data types and their corresponding short format
+/// for GlueSQL
+const LONG_FORMAT_TYPES: [(&str, &str); 4] = [
+    ("INTEGER", "INT"),
+    ("CHARACTER", "CHAR"),
+    ("DECIMAL", "DEC"),
+    ("TEMPORARY", "TEMP"),
 ];
 
 /// Remove all multiline comments from the SQL content
