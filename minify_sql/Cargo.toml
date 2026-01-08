@@ -16,3 +16,4 @@ regex.workspace = true
 
 [features]
 gluesql = []
+sqlite = []

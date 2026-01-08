@@ -90,6 +90,15 @@ const LONG_FORMAT_TYPES: [(&str, &str); 5] = [
     ("TEMPORARY", "TEMP"),
 ];
 
+#[cfg(feature = "sqlite")]
+/// List of long format data types and their corresponding short format
+const LONG_FORMAT_TYPES: [(&str, &str); 4] = [
+    ("BOOLEAN", "BOOL"),
+    ("CHARACTER", "CHAR"),
+    ("DECIMAL", "DEC"),
+    ("TEMPORARY", "TEMP"),
+];
+
 #[cfg(feature = "gluesql")]
 /// List of long format data types and their corresponding short format
 /// for GlueSQL

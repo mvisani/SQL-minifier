@@ -21,3 +21,4 @@ minify_sql.workspace = true
 
 [features]
 gluesql = ["minify_sql/gluesql"]
+sqlite = ["minify_sql/sqlite"]
