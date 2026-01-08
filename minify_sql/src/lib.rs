@@ -80,7 +80,7 @@ pub fn minify_sql(document: &str) -> String {
     output
 }
 
-#[cfg(not(feature = "gluesql"))]
+#[cfg(all(not(feature = "gluesql"), not(feature = "sqlite")))]
 /// List of long format data types and their corresponding short format
 const LONG_FORMAT_TYPES: [(&str, &str); 5] = [
     ("INTEGER", "INT"),
