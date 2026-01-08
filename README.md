@@ -11,7 +11,7 @@ It removes both single-line `--` and multi-line `/* ... */` comments, unnecessar
 Add the following to your `Cargo.toml` file:
 ```toml
 [dependencies]
-sql_minifier = "0.1.5"
+sql_minifier = "0.1.6"
 ```
 
 or use the following command:
