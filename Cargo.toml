@@ -29,12 +29,12 @@ authors = ["Marco Visani", "Luca Cappelletti"]
 keywords = ["sql", "minifier", "compression", "database", "macro"]
 
 [workspace.dependencies]
-# minify_sql = { version = "0.1.6" }
-minify_sql = { path = "minify_sql" }
-# load_sql_proc = { version = "0.1.6" }
-load_sql_proc = { path = "load_sql_proc" }
-# minify_sql_proc = { version = "0.1.6" }
-minify_sql_proc = { path = "minify_sql_proc" }
+minify_sql = { version = "0.1.7" }
+# minify_sql = { path = "minify_sql" }
+load_sql_proc = { version = "0.1.7" }
+# load_sql_proc = { path = "load_sql_proc" }
+minify_sql_proc = { version = "0.1.7" }
+# minify_sql_proc = { path = "minify_sql_proc" }
 quote = "1.0.36"
 regex = "1.10.4"
 syn = "2.0.59"
