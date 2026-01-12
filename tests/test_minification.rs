@@ -56,3 +56,13 @@ fn test_table_name_with_type() {
 
     assert_eq!(content, expected);
 }
+
+#[cfg(feature = "sqlite")]
+#[test]
+fn test_sqlite_autoincrement() {
+    let expected_file_path = "tests/test_sqlite_feature_minified.sql";
+    let expected = fs::read_to_string(expected_file_path).unwrap();
+    let content = load_sql!("tests/test_sqlite_feature.sql");
+
+    assert_eq!(content, expected);
+}

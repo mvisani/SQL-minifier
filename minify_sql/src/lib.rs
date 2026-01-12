@@ -48,11 +48,22 @@ pub fn minify_sql(document: &str) -> String {
     // "DECIMAL" by "DEC", while handling the case where table names of column
     // names contain these words.
 
+    #[cfg(feature = "sqlite")]
+    {
+        document_without_comments =
+            protect_sqlite_autoincrement_integer(&document_without_comments);
+    }
     for (long, short) in LONG_FORMAT_TYPES {
         let re = Regex::new(&format!(r"\b{}\b", long)).unwrap();
         document_without_comments = re
             .replace_all(&document_without_comments, short)
             .to_string();
+    }
+
+    #[cfg(feature = "sqlite")]
+    {
+        document_without_comments =
+            restore_sqlite_autoincrement_integer(&document_without_comments);
     }
 
     // remove all excess whitespaces meaning that if the string has more that
@@ -80,19 +91,10 @@ pub fn minify_sql(document: &str) -> String {
     output
 }
 
-#[cfg(all(not(feature = "gluesql"), not(feature = "sqlite")))]
+#[cfg(not(feature = "gluesql"))]
 /// List of long format data types and their corresponding short format
 const LONG_FORMAT_TYPES: [(&str, &str); 5] = [
     ("INTEGER", "INT"),
-    ("BOOLEAN", "BOOL"),
-    ("CHARACTER", "CHAR"),
-    ("DECIMAL", "DEC"),
-    ("TEMPORARY", "TEMP"),
-];
-
-#[cfg(feature = "sqlite")]
-/// List of long format data types and their corresponding short format
-const LONG_FORMAT_TYPES: [(&str, &str); 4] = [
     ("BOOLEAN", "BOOL"),
     ("CHARACTER", "CHAR"),
     ("DECIMAL", "DEC"),
@@ -179,4 +181,34 @@ fn remove_single_line_comments(document: &str) -> String {
     }
 
     output
+}
+
+#[cfg(feature = "sqlite")]
+/// Protect the "INTEGER" keyword in "AUTOINCREMENT" columns for SQLite
+/// from being minified to "INT".
+/// # Arguments
+/// * `sql` - A string slice that holds the content of the SQL file
+///
+/// # Returns
+/// Returns a `String` with the protected SQL content.
+fn protect_sqlite_autoincrement_integer(sql: &str) -> String {
+    let column_re = Regex::new(r"(?i)\b\w+\s+[^,]*\bAUTOINCREMENT\b[^,]*").unwrap();
+    let protected_sql = column_re.replace_all(sql, |caps: &regex::Captures| {
+        let column_def = &caps[0];
+        let modified_column_def = column_def.replace("INTEGER", "INT_PROTECTED");
+        modified_column_def
+    });
+    protected_sql.to_string()
+}
+
+/// Restore the "INTEGER" keyword in "AUTOINCREMENT" columns for SQLite
+/// that were previously protected.
+/// # Arguments
+/// * `sql` - A string slice that holds the content of the SQL file
+///
+/// # Returns
+/// Returns a `String` with the restored SQL content.
+#[cfg(feature = "sqlite")]
+fn restore_sqlite_autoincrement_integer(sql: &str) -> String {
+    sql.replace("INT_PROTECTED", "INTEGER")
 }
