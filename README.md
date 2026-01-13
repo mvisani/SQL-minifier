@@ -1,25 +1,31 @@
 # SQL minifier
+
 [![Build status](https://github.com/mvisani/SQL-minifier/actions/workflows/build.yml/badge.svg)](https://github.com/mvisani/SQL-minifier/actions)
 [![Crates.io](https://img.shields.io/crates/v/SQL-minifier.svg)](https://crates.io/crates/SQL-minifier)
 [![Documentation](https://docs.rs/sql_minifier/badge.svg)](https://docs.rs/sql_minifier)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Codecov](https://codecov.io/gh/mvisani/SQL-minifier/branch/main/graph/badge.svg)](https://codecov.io/gh/mvisani/SQL-minifier)
 
 [SQL minifier](https://github.com/mvisani/SQL-minifier) provides methods and procedural macros to minify SQL code, optionally at compile time.
 It removes both single-line `--` and multi-line `/* ... */` comments, unnecessary whitespaces, and shortens SQL keywords such as `INTEGER` to `INT`.
 
 ## Installation
+
 Add the following to your `Cargo.toml` file:
+
 ```toml
 [dependencies]
 sql_minifier = "0.1.7"
 ```
 
 or use the following command:
+
 ```bash
 cargo add sql_minifier
 ```
 
 ## Examples
+
 Suppose you have an SQL string and you want to minify it. You can use the [`minify_sql`](https://github.com/mvisani/SQL-minifier/blob/b22627d27905ea5ce92d3a683ac10d11bccbfae9/minify_sql/src/lib.rs#L35) function:
 
 ```rust
@@ -45,6 +51,7 @@ assert_eq!(
 ```
 
 If you want this to be done at compile time, you can use the [`minify_sql`](https://github.com/mvisani/SQL-minifier/blob/b22627d27905ea5ce92d3a683ac10d11bccbfae9/minify_sql_proc/src/lib.rs#L39) macro:
+
 ```rust
 use sql_minifier::macros::minify_sql;
 
@@ -68,6 +75,7 @@ assert_eq!(
 ```
 
 A more complex [SQL file](tests/test_file_3.sql) such as:
+
 ```sql
 -- SQL defining the container_horizontal_rules table.
 -- The container horizontal rules define whether an item type can be placed next to another item type.
@@ -114,6 +122,7 @@ CREATE TABLE container_horizontal_rules (
 ```
 
 We can load it and minify it at compile time using the [`load_sql`](https://github.com/mvisani/SQL-minifier/blob/b22627d27905ea5ce92d3a683ac10d11bccbfae9/load_sql_proc/src/lib.rs#L26) macro:
+
 ```rust
 use sql_minifier::macros::load_sql;
 
@@ -126,6 +135,8 @@ assert_eq!(
 ```
 
 ## Features
+
 We support the following features:
+
 - `gluesql`: When enabled, the minifier will not minify BOOLEAN keywords to BOOL, as it is not supported by [GlueSQL](https://gluesql.org/docs/0.14/).
 - `sqlite` : When enabled, the minifier will not minify INTEGER keywords to INT, when AUTOINCREMENT is present.
