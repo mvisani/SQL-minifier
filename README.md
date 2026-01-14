@@ -140,3 +140,4 @@ We support the following features:
 
 - `gluesql`: When enabled, the minifier will not minify BOOLEAN keywords to BOOL, as it is not supported by [GlueSQL](https://gluesql.org/docs/0.14/).
 - `sqlite` : When enabled, the minifier will not minify INTEGER keywords to INT, when AUTOINCREMENT is present.
+
